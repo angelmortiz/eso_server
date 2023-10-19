@@ -47,11 +47,11 @@ class Exercise(models.Model):
     link_to_thumbnail = models.URLField(max_length=255, null=True)
     link_to_video = models.URLField(max_length=255, null=True)
     # One-to-Many
-    main_muscle = models.ForeignKey(to=Muscle, on_delete=models.PROTECT, related_name='exercises')
+    main_muscle = models.ForeignKey(to=Muscle, on_delete=models.PROTECT, related_name='main_exercises')
     # Many-to-Many
     types = models.ManyToManyField(to=ExerciseType, related_name='exercises')
     equipments = models.ManyToManyField(to=Equipment, related_name='exercises')
-    secondary_muscles = models.ManyToManyField(to=Muscle, related_name='exercises')
+    secondary_muscles = models.ManyToManyField(to=Muscle, related_name='secondary_exercises')
 
 
 class TrainingType(models.Model):
