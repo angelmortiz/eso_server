@@ -3,10 +3,19 @@ from django.db import models
 
 
 class Equipment(models.Model):
+    TYPE_BILATERAL = 'Bilateral'
+    TYPE_UNILATERAL = 'Unilateral'
+
+    TYPE_CHOICES = [
+        (TYPE_BILATERAL, TYPE_BILATERAL),
+        (TYPE_UNILATERAL, TYPE_UNILATERAL),
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     alternative_name = models.CharField(max_length=255, null=True)
     description = models.TextField(null=True)
+    type = models.CharField(max_length=15, choices=TYPE_CHOICES, null=True)
     link_to_image = models.URLField(max_length=255, null=True)
     link_to_thumbnail = models.URLField(max_length=255, null=True)
 
