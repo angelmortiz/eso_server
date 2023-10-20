@@ -26,11 +26,19 @@ class Equipment(models.Model):
 
 
 class Muscle(models.Model):
+    TYPE_BIG = 'Big'
+    TYPE_SMALL = 'Small'
+
+    TYPE_CHOICES = [
+        (TYPE_BIG, TYPE_BIG),
+        (TYPE_SMALL, TYPE_SMALL),
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     alternative_name = models.CharField(max_length=255, null=True)
     description = models.TextField(null=True)
-    type = models.CharField(max_length=50)
+    type = models.CharField(max_length=10, choices=TYPE_CHOICES, default=TYPE_BIG, null=True)
     link_to_image = models.URLField(max_length=255, null=True)
     link_to_thumbnail = models.URLField(max_length=255, null=True)
 
