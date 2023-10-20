@@ -1,4 +1,6 @@
 import uuid
+
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
@@ -79,7 +81,7 @@ class Exercise(models.Model):
     link_to_thumbnail = models.URLField(max_length=255, null=True)
     link_to_video = models.URLField(max_length=255, null=True)
     # One-to-Many
-    main_muscle = models.ForeignKey(to=Muscle, on_delete=models.PROTECT, related_name='main_exercise_set')
+    main_muscle = models.ForeignKey(to=Muscle, on_delete=models.SET_NULL, null=True, related_name='main_exercise_set')
     # Many-to-Many
     secondary_muscles = models.ManyToManyField(to=Muscle, related_name='secondary_exercise_set')
     types = models.ManyToManyField(to=ExerciseType)
@@ -99,6 +101,26 @@ class TrainingType(models.Model):
         indexes = [
             models.Index(fields=['name'])
         ]
+
+
+class ExercisePlan(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # Related exercise
+    exercise = models.ForeignKey(to=Exercise, on_delete=models.SET_NULL, null=True, related_name='exerciseplan_set')
+    min_sets = models.PositiveSmallIntegerField(default=3)
+    max_sets = models.PositiveSmallIntegerField(default=4)
+    min_reps = models.PositiveSmallIntegerField(default=8)
+    max_reps = models.PositiveSmallIntegerField(default=15)
+    tempo_eccentric = models.PositiveSmallIntegerField(default=1)
+    tempo_pause_1 = models.PositiveSmallIntegerField(default=1)
+    tempo_concentric = models.PositiveSmallIntegerField(default=1)
+    tempo_pause_2 = models.PositiveSmallIntegerField(default=1)
+    min_rir = models.PositiveSmallIntegerField(default=0)
+    max_rir = models.PositiveSmallIntegerField(default=3)
+    # Superset
+    superset = models.BooleanField(default=False)
+    superset_exercise = models.ForeignKey(to=Exercise, on_delete=models.SET_NULL, default=None, null=True,
+                                          related_name='superset_exerciseplan_set')
 
 
 class Workout(models.Model):
@@ -127,12 +149,37 @@ class Workout(models.Model):
     link_to_image = models.URLField(max_length=255, null=True)
     link_to_thumbnail = models.URLField(max_length=255, null=True)
     # Many-to-Many
-    exercises = models.ManyToManyField(to=Exercise)
+    exercise_plans = models.ManyToManyField(to=ExercisePlan)
 
     class Meta:
         indexes = [
             models.Index(fields=['name'])
         ]
+
+
+class WorkoutPlan(models.Model):
+    DAY_MONDAY = 'Monday'
+    DAY_TUESDAY = 'Tuesday'
+    DAY_WEDNESDAY = 'Wednesday'
+    DAY_THURSDAY = 'Thursday'
+    DAY_FRIDAY = 'Friday'
+    DAY_SATURDAY = 'Saturday'
+    DAY_SUNDAY = 'Sunday'
+
+    DAY_CHOICES = [
+        (DAY_MONDAY, DAY_MONDAY),
+        (DAY_TUESDAY, DAY_TUESDAY),
+        (DAY_WEDNESDAY, DAY_WEDNESDAY),
+        (DAY_THURSDAY, DAY_THURSDAY),
+        (DAY_FRIDAY, DAY_FRIDAY),
+        (DAY_SATURDAY, DAY_SATURDAY),
+        (DAY_SUNDAY, DAY_SUNDAY),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    workout = models.ForeignKey(to=Workout, on_delete=models.SET_NULL, null=True)
+    day_number = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(7)], null=True)
+    day_of_the_week = models.CharField(max_length=10, choices=DAY_CHOICES, null=True)
 
 
 class Program(models.Model):
@@ -153,7 +200,7 @@ class Program(models.Model):
     link_to_thumbnail = models.URLField(max_length=255, null=True)
     # Many-to-Many
     types = models.ManyToManyField(to=TrainingType, null=True)
-    workouts = models.ManyToManyField(to=Workout)
+    workout_plans = models.ManyToManyField(to=WorkoutPlan)
 
     class Meta:
         indexes = [
