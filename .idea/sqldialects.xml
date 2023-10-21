@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/fitness/data/seeds/fitness_equipments.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/fitness/data/seeds/fitness_exercise.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/fitness/data/seeds/fitness_exercisetype.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/fitness/data/seeds/fitness_muscles.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/fitness/data/seeds/fitness_program.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/fitness/data/seeds/fitness_program_types.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/fitness/data/seeds/fitness_trainingtype.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/fitness/data/seeds/fitness_workout.sql" dialect="PostgreSQL" />
+  </component>
+</project>

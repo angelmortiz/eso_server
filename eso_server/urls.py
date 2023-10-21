@@ -18,6 +18,9 @@ import debug_toolbar
 from django.contrib import admin
 from django.urls import path, include
 
+# Customizing admin panel
+admin.site.site_header = 'En Salud Optima Admin'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('__debug__/', include(debug_toolbar.urls))
