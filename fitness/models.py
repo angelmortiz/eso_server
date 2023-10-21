@@ -21,7 +21,11 @@ class Equipment(models.Model):
     link_to_image = models.URLField(max_length=255, null=True)
     link_to_thumbnail = models.URLField(max_length=255, null=True)
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
+        ordering = ['name']
         indexes = [
             models.Index(fields=['name'])
         ]
@@ -44,7 +48,11 @@ class Muscle(models.Model):
     link_to_image = models.URLField(max_length=255, null=True)
     link_to_thumbnail = models.URLField(max_length=255, null=True)
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
+        ordering = ['name']
         indexes = [
             models.Index(fields=['name'])
         ]
@@ -54,7 +62,11 @@ class ExerciseType(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=15)
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
+        ordering = ['name']
         indexes = [
             models.Index(fields=['name'])
         ]
@@ -87,7 +99,11 @@ class Exercise(models.Model):
     types = models.ManyToManyField(to=ExerciseType)
     equipments = models.ManyToManyField(to=Equipment)
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
+        ordering = ['name']
         indexes = [
             models.Index(fields=['name'])
         ]
@@ -97,7 +113,11 @@ class TrainingType(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=15)
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
+        ordering = ['name']
         indexes = [
             models.Index(fields=['name'])
         ]
@@ -151,7 +171,11 @@ class Workout(models.Model):
     # Many-to-Many
     exercise_plans = models.ManyToManyField(to=ExercisePlan)
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
+        ordering = ['name']
         indexes = [
             models.Index(fields=['name'])
         ]
@@ -199,10 +223,14 @@ class Program(models.Model):
     link_to_image = models.URLField(max_length=255, null=True)
     link_to_thumbnail = models.URLField(max_length=255, null=True)
     # Many-to-Many
-    types = models.ManyToManyField(to=TrainingType, null=True)
+    types = models.ManyToManyField(to=TrainingType)
     workout_plans = models.ManyToManyField(to=WorkoutPlan)
 
+    def __str__(self) -> str:
+        return self.name
+
     class Meta:
+        ordering = ['name']
         indexes = [
             models.Index(fields=['name'])
         ]

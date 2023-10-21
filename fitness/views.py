@@ -1,3 +1,5 @@
 from django.shortcuts import render
+from fitness.models import Equipment
 
-# Create your views here.
+def get_all_equipments(request):
+    pass
