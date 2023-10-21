@@ -15,11 +15,11 @@ class Equipment(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    alternative_name = models.CharField(max_length=255, null=True)
-    description = models.TextField(null=True)
-    type = models.CharField(max_length=15, choices=TYPE_CHOICES, null=True)
-    link_to_image = models.URLField(max_length=255, null=True)
-    link_to_thumbnail = models.URLField(max_length=255, null=True)
+    alternative_name = models.CharField(max_length=255, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    type = models.CharField(max_length=15, choices=TYPE_CHOICES, null=True, blank=True)
+    link_to_image = models.URLField(max_length=255, null=True, blank=True)
+    link_to_thumbnail = models.URLField(max_length=255, null=True, blank=True)
 
     def __str__(self) -> str:
         return self.name
@@ -42,11 +42,11 @@ class Muscle(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    alternative_name = models.CharField(max_length=255, null=True)
-    description = models.TextField(null=True)
-    type = models.CharField(max_length=10, choices=TYPE_CHOICES, default=TYPE_BIG, null=True)
-    link_to_image = models.URLField(max_length=255, null=True)
-    link_to_thumbnail = models.URLField(max_length=255, null=True)
+    alternative_name = models.CharField(max_length=255, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    type = models.CharField(max_length=10, choices=TYPE_CHOICES, default=TYPE_BIG, null=True, blank=True)
+    link_to_image = models.URLField(max_length=255, null=True, blank=True)
+    link_to_thumbnail = models.URLField(max_length=255, null=True, blank=True)
 
     def __str__(self) -> str:
         return self.name
@@ -85,15 +85,16 @@ class Exercise(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    alternative_name = models.CharField(max_length=255, null=True)
-    description = models.TextField(null=True)
+    alternative_name = models.CharField(max_length=255, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     difficulty = models.CharField(max_length=15, choices=DIFFICULTY_CHOICES, default=DIFFICULTY_INTERMEDIATE)
     compound_movement = models.BooleanField(default=False)
-    link_to_image = models.URLField(max_length=255, null=True)
-    link_to_thumbnail = models.URLField(max_length=255, null=True)
-    link_to_video = models.URLField(max_length=255, null=True)
-    # One-to-Many
-    main_muscle = models.ForeignKey(to=Muscle, on_delete=models.SET_NULL, null=True, related_name='main_exercise_set')
+    link_to_image = models.URLField(max_length=255, null=True, blank=True)
+    link_to_thumbnail = models.URLField(max_length=255, null=True, blank=True)
+    link_to_video = models.URLField(max_length=255, null=True, blank=True)
+    # Related muscle
+    main_muscle = models.ForeignKey(to=Muscle, on_delete=models.SET_NULL, null=True, blank=True,
+                                    related_name='main_exercise_set')
     # Many-to-Many
     secondary_muscles = models.ManyToManyField(to=Muscle, related_name='secondary_exercise_set')
     types = models.ManyToManyField(to=ExerciseType)
@@ -123,26 +124,6 @@ class TrainingType(models.Model):
         ]
 
 
-class ExercisePlan(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    # Related exercise
-    exercise = models.ForeignKey(to=Exercise, on_delete=models.SET_NULL, null=True, related_name='exerciseplan_set')
-    min_sets = models.PositiveSmallIntegerField(default=3)
-    max_sets = models.PositiveSmallIntegerField(default=4)
-    min_reps = models.PositiveSmallIntegerField(default=8)
-    max_reps = models.PositiveSmallIntegerField(default=15)
-    tempo_eccentric = models.PositiveSmallIntegerField(default=1)
-    tempo_pause_1 = models.PositiveSmallIntegerField(default=1)
-    tempo_concentric = models.PositiveSmallIntegerField(default=1)
-    tempo_pause_2 = models.PositiveSmallIntegerField(default=1)
-    min_rir = models.PositiveSmallIntegerField(default=0)
-    max_rir = models.PositiveSmallIntegerField(default=3)
-    # Superset
-    superset = models.BooleanField(default=False)
-    superset_exercise = models.ForeignKey(to=Exercise, on_delete=models.SET_NULL, default=None, null=True,
-                                          related_name='superset_exerciseplan_set')
-
-
 class Workout(models.Model):
     TARGET_FULL_BODY = 'Full Body'
     TARGET_UPPER_BODY = 'Upper Body'
@@ -162,14 +143,13 @@ class Workout(models.Model):
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
-    description = models.TextField(null=True)
-    variant = models.CharField(max_length=5, null=True)
-    type = models.ForeignKey(to=TrainingType, on_delete=models.SET_NULL, null=True)
-    target = models.CharField(max_length=20, choices=TARGET_CHOICES, default=TARGET_MIXED, null=True)
-    link_to_image = models.URLField(max_length=255, null=True)
-    link_to_thumbnail = models.URLField(max_length=255, null=True)
-    # Many-to-Many
-    exercise_plans = models.ManyToManyField(to=ExercisePlan)
+    description = models.TextField(null=True, blank=True)
+    variant = models.CharField(max_length=5, null=True, blank=True)
+    # Related type
+    type = models.ForeignKey(to=TrainingType, on_delete=models.SET_NULL, null=True, blank=True)
+    target = models.CharField(max_length=20, choices=TARGET_CHOICES, default=TARGET_MIXED, null=True, blank=True)
+    link_to_image = models.URLField(max_length=255, null=True, blank=True)
+    link_to_thumbnail = models.URLField(max_length=255, null=True, blank=True)
 
     def __str__(self) -> str:
         return self.name
@@ -181,7 +161,59 @@ class Workout(models.Model):
         ]
 
 
-class WorkoutPlan(models.Model):
+class WorkoutExerciseRoutine(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    # Related workout
+    workout = models.ForeignKey(to=Workout, on_delete=models.CASCADE, null=True, blank=True)
+    # Related exercise
+    exercise = models.ForeignKey(to=Exercise, on_delete=models.SET_NULL, null=True, blank=True,
+                                 related_name='exercise_workoutexerciseroutine_set')
+    min_sets = models.PositiveSmallIntegerField(default=3)
+    max_sets = models.PositiveSmallIntegerField(default=4)
+    min_reps = models.PositiveSmallIntegerField(default=8)
+    max_reps = models.PositiveSmallIntegerField(default=15)
+    tempo_eccentric = models.PositiveSmallIntegerField(default=1)
+    tempo_pause_1 = models.PositiveSmallIntegerField(default=1)
+    tempo_concentric = models.PositiveSmallIntegerField(default=1)
+    tempo_pause_2 = models.PositiveSmallIntegerField(default=1)
+    min_rir = models.PositiveSmallIntegerField(default=0)
+    max_rir = models.PositiveSmallIntegerField(default=3)
+    # Superset
+    superset = models.BooleanField(default=False)
+    superset_exercise = models.ForeignKey(to=Exercise, on_delete=models.SET_NULL, default=None, null=True, blank=True,
+                                          related_name='superset_workoutexerciseroutine_set')
+
+
+class Program(models.Model):
+    SEQUENCE_WEEKLY = 'Weekly'
+    SEQUENCE_CYCLE = 'Cycle'
+
+    SEQUENCE_OPTIONS = [
+        (SEQUENCE_WEEKLY, SEQUENCE_WEEKLY),
+        (SEQUENCE_CYCLE, SEQUENCE_CYCLE),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+    sequence = models.CharField(max_length=10, choices=SEQUENCE_OPTIONS, default=SEQUENCE_WEEKLY)
+    duration = models.PositiveSmallIntegerField()
+    link_to_image = models.URLField(max_length=255, null=True, blank=True)
+    link_to_thumbnail = models.URLField(max_length=255, null=True, blank=True)
+    # Many-to-Many
+    types = models.ManyToManyField(to=TrainingType)
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+        indexes = [
+            models.Index(fields=['name'])
+        ]
+
+
+class ProgramWorkoutRoutine(models.Model):
     DAY_MONDAY = 'Monday'
     DAY_TUESDAY = 'Tuesday'
     DAY_WEDNESDAY = 'Wednesday'
@@ -200,13 +232,6 @@ class WorkoutPlan(models.Model):
         (DAY_SUNDAY, DAY_SUNDAY),
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    workout = models.ForeignKey(to=Workout, on_delete=models.SET_NULL, null=True)
-    day_number = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(7)], null=True)
-    day_of_the_week = models.CharField(max_length=10, choices=DAY_CHOICES, null=True)
-
-
-class Program(models.Model):
     SEQUENCE_WEEKLY = 'Weekly'
     SEQUENCE_CYCLE = 'Cycle'
 
@@ -216,21 +241,11 @@ class Program(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=255)
-    description = models.TextField(null=True)
+    # Related program
+    program = models.ForeignKey(to=Program, on_delete=models.CASCADE, null=True, blank=True)
+    # Related workout
+    workout = models.ForeignKey(to=Workout, on_delete=models.SET_NULL, null=True, blank=True)
     sequence = models.CharField(max_length=10, choices=SEQUENCE_OPTIONS, default=SEQUENCE_WEEKLY)
-    duration = models.PositiveSmallIntegerField()
-    link_to_image = models.URLField(max_length=255, null=True)
-    link_to_thumbnail = models.URLField(max_length=255, null=True)
-    # Many-to-Many
-    types = models.ManyToManyField(to=TrainingType)
-    workout_plans = models.ManyToManyField(to=WorkoutPlan)
-
-    def __str__(self) -> str:
-        return self.name
-
-    class Meta:
-        ordering = ['name']
-        indexes = [
-            models.Index(fields=['name'])
-        ]
+    day_number = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(7)], null=True,
+                                                  blank=True)
+    day_of_the_week = models.CharField(max_length=10, choices=DAY_CHOICES, null=True, blank=True)
