@@ -168,16 +168,16 @@ class WorkoutExerciseRoutine(models.Model):
     # Related exercise
     exercise = models.ForeignKey(to=Exercise, on_delete=models.SET_NULL, null=True, blank=True,
                                  related_name='exercise_workoutexerciseroutine_set')
-    min_sets = models.PositiveSmallIntegerField(default=3)
-    max_sets = models.PositiveSmallIntegerField(default=4)
-    min_reps = models.PositiveSmallIntegerField(default=8)
-    max_reps = models.PositiveSmallIntegerField(default=15)
-    tempo_eccentric = models.PositiveSmallIntegerField(default=1)
-    tempo_pause_1 = models.PositiveSmallIntegerField(default=1)
-    tempo_concentric = models.PositiveSmallIntegerField(default=1)
-    tempo_pause_2 = models.PositiveSmallIntegerField(default=1)
-    min_rir = models.PositiveSmallIntegerField(default=0)
-    max_rir = models.PositiveSmallIntegerField(default=3)
+    min_sets = models.PositiveSmallIntegerField(default=3, null=True, blank=True)
+    max_sets = models.PositiveSmallIntegerField(default=4, null=True, blank=True)
+    min_reps = models.PositiveSmallIntegerField(default=8, null=True, blank=True)
+    max_reps = models.PositiveSmallIntegerField(default=15, null=True, blank=True)
+    tempo_eccentric = models.PositiveSmallIntegerField(default=1, null=True, blank=True)
+    tempo_pause_1 = models.PositiveSmallIntegerField(default=1, null=True, blank=True)
+    tempo_concentric = models.PositiveSmallIntegerField(default=1, null=True, blank=True)
+    tempo_pause_2 = models.PositiveSmallIntegerField(default=1, null=True, blank=True)
+    min_rir = models.PositiveSmallIntegerField(default=0, null=True, blank=True)
+    max_rir = models.PositiveSmallIntegerField(default=3, null=True, blank=True)
     # Superset
     superset = models.BooleanField(default=False)
     superset_exercise = models.ForeignKey(to=Exercise, on_delete=models.SET_NULL, default=None, null=True, blank=True,
