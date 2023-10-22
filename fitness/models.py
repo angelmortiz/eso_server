@@ -96,9 +96,9 @@ class Exercise(models.Model):
     main_muscle = models.ForeignKey(to=Muscle, on_delete=models.SET_NULL, null=True, blank=True,
                                     related_name='main_exercise_set')
     # Many-to-Many
-    secondary_muscles = models.ManyToManyField(to=Muscle, related_name='secondary_exercise_set')
-    types = models.ManyToManyField(to=ExerciseType)
-    equipments = models.ManyToManyField(to=Equipment)
+    secondary_muscles = models.ManyToManyField(to=Muscle, blank=True, related_name='secondary_exercise_set')
+    types = models.ManyToManyField(to=ExerciseType, blank=True)
+    equipments = models.ManyToManyField(to=Equipment, blank=True)
 
     def __str__(self) -> str:
         return self.name
