@@ -13,6 +13,8 @@ urlpatterns = [
     path('workouts/routines/', workouts.workout_list_with_routines),
     path('workouts/<uuid:workout_id>/', workouts.workout_detail),
     path('workouts/routines/<uuid:workout_id>/', workouts.workout_detail_with_routines),
-    path('programs/', programs.program_list),
+    path('programs/', programs.program_list_simple),
+    path('programs/routines/', programs.program_list_with_routines),
     path('programs/<uuid:program_id>/', programs.program_detail),
+    path('programs/routines/<uuid:program_id>/', programs.program_detail_with_routines),
 ]

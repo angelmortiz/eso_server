@@ -52,23 +52,20 @@ class ExerciseSimpleSerializer(serializers.ModelSerializer):
                   'link_to_image', 'link_to_thumbnail', 'link_to_video']
 
 
-class ExerciseDetailSerializer(serializers.ModelSerializer):
+class ExerciseDetailSerializer(ExerciseSimpleSerializer):
     main_muscle = ExerciseMuscleSerializer()
     secondary_muscles = ExerciseMuscleSerializer(many=True)
     equipments = ExerciseEquipmentSerializer(many=True)
     types = ExerciseTypeSerializer(many=True)
 
-    class Meta:
-        model = Exercise
-        fields = ['id', 'name', 'alternative_name', 'description', 'difficulty', 'compound_movement',
-                  'link_to_image', 'link_to_thumbnail', 'link_to_video', 'main_muscle', 'secondary_muscles',
-                  'equipments', 'types']
+    class Meta(ExerciseSimpleSerializer.Meta):
+        fields = [*ExerciseSimpleSerializer.Meta.fields, 'main_muscle', 'secondary_muscles', 'equipments', 'types']
 
 
 class TrainingTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrainingType
-        fields = ['name']
+        fields = ['id', 'name']
 
 
 class ExerciseWorkoutSerializer(IdAndNameSerializer):
@@ -88,27 +85,44 @@ class WorkoutExerciseRoutineSerializer(serializers.ModelSerializer):
 
 
 class WorkoutSerializer(serializers.ModelSerializer):
+    type = TrainingTypeSerializer()
+
     class Meta:
         model = Workout
         fields = ['id', 'name', 'description', 'variant', 'type', 'target', 'link_to_image', 'link_to_thumbnail']
 
 
-class WorkoutWithRoutinesSerializer(serializers.ModelSerializer):
+class WorkoutWithRoutinesSerializer(WorkoutSerializer):
     exercise_routines = WorkoutExerciseRoutineSerializer(many=True, source='workoutexerciseroutine_set')
 
+    class Meta(WorkoutSerializer.Meta):
+        fields = [*WorkoutSerializer.Meta.fields, 'exercise_routines']
+
+
+class ProgramWorkoutNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workout
-        fields = ['id', 'name', 'description', 'variant', 'type', 'target', 'link_to_image', 'link_to_thumbnail',
-                  'exercise_routines']
+        fields = ['id', 'name']
+
+
+class ProgramWorkoutRoutineSerializer(serializers.ModelSerializer):
+    workout = ProgramWorkoutNameSerializer()
+
+    class Meta:
+        model = ProgramWorkoutRoutine
+        fields = ['id', 'workout', 'sequence', 'day_number', 'day_of_the_week']
 
 
 class ProgramSerializer(serializers.ModelSerializer):
+    types = TrainingTypeSerializer(many=True)
+
     class Meta:
         model = Program
         fields = ['id', 'name', 'description', 'sequence', 'duration', 'link_to_image', 'link_to_thumbnail', 'types']
 
 
-class ProgramWorkoutRoutineSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProgramWorkoutRoutine
-        fields = ['id', 'program', 'workout', 'sequence', 'day_number', 'day_of_the_week']
+class ProgramWithRoutinesSerializer(ProgramSerializer):
+    workout_routines = ProgramWorkoutRoutineSerializer(many=True, source='programworkoutroutine_set')
+
+    class Meta(ProgramSerializer.Meta):
+        fields = [*ProgramSerializer.Meta.fields, 'workout_routines']
