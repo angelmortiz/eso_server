@@ -12,6 +12,11 @@ from .models import (
 )
 
 
+class IdAndNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ['id', 'name', 'alternative_name']
+
+
 class EquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipment
@@ -24,16 +29,14 @@ class MuscleSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'alternative_name', 'description', 'type', 'link_to_image', 'link_to_thumbnail']
 
 
-class ExerciseMuscleSerializer(serializers.ModelSerializer):
-    class Meta:
+class ExerciseMuscleSerializer(IdAndNameSerializer):
+    class Meta(IdAndNameSerializer.Meta):
         model = Muscle
-        fields = ['id', 'name', 'alternative_name']
 
 
 class ExerciseEquipmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Muscle
-        fields = ['id', 'name', 'alternative_name']
+    class Meta(IdAndNameSerializer.Meta):
+        model = Equipment
 
 
 class ExerciseTypeSerializer(serializers.ModelSerializer):
@@ -50,16 +53,16 @@ class ExerciseSimpleSerializer(serializers.ModelSerializer):
 
 
 class ExerciseDetailSerializer(serializers.ModelSerializer):
+    main_muscle = ExerciseMuscleSerializer()
+    secondary_muscles = ExerciseMuscleSerializer(many=True)
+    equipments = ExerciseEquipmentSerializer(many=True)
+    types = ExerciseTypeSerializer(many=True)
+
     class Meta:
         model = Exercise
         fields = ['id', 'name', 'alternative_name', 'description', 'difficulty', 'compound_movement',
                   'link_to_image', 'link_to_thumbnail', 'link_to_video', 'main_muscle', 'secondary_muscles',
                   'equipments', 'types']
-
-    main_muscle = ExerciseMuscleSerializer()
-    secondary_muscles = ExerciseMuscleSerializer(many=True)
-    equipments = ExerciseEquipmentSerializer(many=True)
-    types = ExerciseTypeSerializer(many=True)
 
 
 class TrainingTypeSerializer(serializers.ModelSerializer):
@@ -68,18 +71,35 @@ class TrainingTypeSerializer(serializers.ModelSerializer):
         fields = ['name']
 
 
+class ExerciseWorkoutSerializer(IdAndNameSerializer):
+    class Meta(IdAndNameSerializer.Meta):
+        model = Exercise
+
+
+class WorkoutExerciseRoutineSerializer(serializers.ModelSerializer):
+    exercise = ExerciseWorkoutSerializer()
+    superset_exercise = ExerciseWorkoutSerializer()
+
+    class Meta:
+        model = WorkoutExerciseRoutine
+        fields = ['id', 'exercise', 'min_sets', 'max_sets', 'min_reps', 'max_reps', 'tempo_eccentric',
+                  'tempo_pause_1', 'tempo_concentric', 'tempo_pause_2', 'min_rir', 'max_rir', 'superset',
+                  'superset_exercise']
+
+
 class WorkoutSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workout
         fields = ['id', 'name', 'description', 'variant', 'type', 'target', 'link_to_image', 'link_to_thumbnail']
 
 
-class WorkoutExerciseRoutineSerializer(serializers.ModelSerializer):
+class WorkoutWithRoutinesSerializer(serializers.ModelSerializer):
+    exercise_routines = WorkoutExerciseRoutineSerializer(many=True, source='workoutexerciseroutine_set')
+
     class Meta:
-        model = WorkoutExerciseRoutine
-        fields = ['id', 'workout', 'exercise', 'min_sets', 'max_sets', 'min_reps', 'max_reps', 'tempo_eccentric',
-                  'tempo_pause_1', 'tempo_concentric', 'tempo_pause_2', 'min_rir', 'max_rir', 'superset',
-                  'superset_exercise']
+        model = Workout
+        fields = ['id', 'name', 'description', 'variant', 'type', 'target', 'link_to_image', 'link_to_thumbnail',
+                  'exercise_routines']
 
 
 class ProgramSerializer(serializers.ModelSerializer):
