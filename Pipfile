@@ -9,6 +9,8 @@ django-debug-toolbar = "*"
 psycopg2 = "*"
 djangorestframework = "*"
 django-filter = "*"
+djoser = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 
