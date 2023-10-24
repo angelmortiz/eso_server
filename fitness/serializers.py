@@ -46,20 +46,21 @@ class ExerciseTypeSerializer(serializers.ModelSerializer):
 
 
 class ExerciseSimpleSerializer(serializers.ModelSerializer):
+    main_muscle = ExerciseMuscleSerializer()
+
     class Meta:
         model = Exercise
         fields = ['id', 'name', 'alternative_name', 'description', 'difficulty', 'compound_movement',
-                  'link_to_image', 'link_to_thumbnail', 'link_to_video']
+                  'main_muscle', 'link_to_image', 'link_to_thumbnail', 'link_to_video']
 
 
 class ExerciseDetailedSerializer(ExerciseSimpleSerializer):
-    main_muscle = ExerciseMuscleSerializer()
     secondary_muscles = ExerciseMuscleSerializer(many=True)
     equipments = ExerciseEquipmentSerializer(many=True)
     types = ExerciseTypeSerializer(many=True)
 
     class Meta(ExerciseSimpleSerializer.Meta):
-        fields = [*ExerciseSimpleSerializer.Meta.fields, 'main_muscle', 'secondary_muscles', 'equipments', 'types']
+        fields = [*ExerciseSimpleSerializer.Meta.fields, 'secondary_muscles', 'equipments', 'types']
 
 
 class TrainingTypeSerializer(serializers.ModelSerializer):
