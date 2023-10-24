@@ -1,3 +1,4 @@
+from rest_framework.filters import SearchFilter
 from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -9,8 +10,9 @@ class WorkoutViewSet(ModelViewSet):
     queryset = Workout.objects.all().select_related('type')
     serializer_class = WorkoutSerializer
     #  Filters
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['target', 'type__name']
+    search_fields = ['name', 'variant']
 
 
 class WorkoutWithRoutinesViewSet(WorkoutViewSet):
