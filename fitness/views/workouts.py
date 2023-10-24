@@ -3,6 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 
 from ..models import Workout
+from ..pagination import DefaultPagination
 from ..serializers import WorkoutSerializer, WorkoutWithRoutinesSerializer
 
 
@@ -13,6 +14,8 @@ class WorkoutViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['target', 'type__name']
     search_fields = ['name', 'variant']
+    # Pagination
+    pagination_class = DefaultPagination
 
 
 class WorkoutWithRoutinesViewSet(WorkoutViewSet):

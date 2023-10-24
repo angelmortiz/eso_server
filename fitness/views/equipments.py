@@ -3,6 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 
 from ..models import Equipment
+from ..pagination import DefaultPagination
 from ..serializers import EquipmentSerializer
 
 
@@ -13,3 +14,5 @@ class EquipmentViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_fields = ['type']
     search_fields = ['name', 'alternative_name']
+    # Pagination
+    pagination_class = DefaultPagination
