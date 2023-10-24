@@ -1,20 +1,22 @@
-from django.urls import path
-from .views import equipments, muscles, exercises, workouts, programs
+from rest_framework.routers import DefaultRouter
+from .views import (
+    EquipmentViewSet,
+    MuscleViewSet,
+    ExerciseSimpleViewSet,
+    ExerciseDetailedViewSet,
+    WorkoutViewSet,
+    WorkoutWithRoutinesViewSet,
+    ProgramViewSet,
+    ProgramWithRoutinesViewSet)
 
-urlpatterns = [
-    path('equipments/', equipments.equipment_list),
-    path('equipments/<uuid:equipment_id>/', equipments.equipment_detail),
-    path('muscles/', muscles.muscle_list),
-    path('muscles/<uuid:muscle_id>/', muscles.muscle_detail),
-    path('exercises/', exercises.exercise_list_simple),
-    path('exercises/detail/', exercises.exercise_list_detail),
-    path('exercises/<uuid:exercise_id>/', exercises.exercise_detail),
-    path('workouts/', workouts.workout_list_simple),
-    path('workouts/routines/', workouts.workout_list_with_routines),
-    path('workouts/<uuid:workout_id>/', workouts.workout_detail),
-    path('workouts/routines/<uuid:workout_id>/', workouts.workout_detail_with_routines),
-    path('programs/', programs.program_list_simple),
-    path('programs/routines/', programs.program_list_with_routines),
-    path('programs/<uuid:program_id>/', programs.program_detail),
-    path('programs/routines/<uuid:program_id>/', programs.program_detail_with_routines),
-]
+router = DefaultRouter()
+router.register(r'equipments', EquipmentViewSet)
+router.register(r'muscles', MuscleViewSet)
+router.register(r'exercises', ExerciseSimpleViewSet)
+router.register(r'exercises-detailed', ExerciseDetailedViewSet)
+router.register(r'workouts', WorkoutViewSet)
+router.register(r'workouts-routines', WorkoutWithRoutinesViewSet)
+router.register(r'programs', ProgramViewSet)
+router.register(r'programs-routines', ProgramWithRoutinesViewSet)
+
+urlpatterns = router.urls

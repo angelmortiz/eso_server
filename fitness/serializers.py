@@ -52,7 +52,7 @@ class ExerciseSimpleSerializer(serializers.ModelSerializer):
                   'link_to_image', 'link_to_thumbnail', 'link_to_video']
 
 
-class ExerciseDetailSerializer(ExerciseSimpleSerializer):
+class ExerciseDetailedSerializer(ExerciseSimpleSerializer):
     main_muscle = ExerciseMuscleSerializer()
     secondary_muscles = ExerciseMuscleSerializer(many=True)
     equipments = ExerciseEquipmentSerializer(many=True)
