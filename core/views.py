@@ -17,7 +17,7 @@ class MemberViewSet(ModelViewSet):
 
     @action(detail=False, methods=['GET', 'PUT', 'PATCH'], permission_classes=[IsAuthenticated])
     def me(self, request: Request) -> Response:
-        (member, _) = Member.objects.select_related('user').get_or_create(user=request.user.id)
+        (member, _) = Member.objects.select_related('user').get_or_create(user=request.user)
         if request.method == 'GET':
             serializer = MemberSerializer(member)
             return Response(serializer.data)
