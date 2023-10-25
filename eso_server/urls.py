@@ -6,10 +6,10 @@ from django.urls import path, include
 admin.site.site_header = 'En Salud Optima Admin'
 
 urlpatterns = [
-    path(r'admin/', admin.site.urls),
-    path(r'auth/', include('djoser.urls')),
-    path(r'auth/', include('djoser.urls.jwt')),
-    path(r'v1/', include('core.urls')),
-    path(r'v1/fitness/', include('fitness.urls')),
-    path(r'__debug__/', include(debug_toolbar.urls))
+    path('', include('core.urls')),
+    path('admin/', admin.site.urls),
+    path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
+    path('v1/fitness/', include('fitness.urls')),
+    path('__debug__/', include(debug_toolbar.urls)),
 ]

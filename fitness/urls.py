@@ -10,13 +10,13 @@ from .views import (
     ProgramWithRoutinesViewSet)
 
 router = DefaultRouter()
-router.register(r'equipments', EquipmentViewSet)
-router.register(r'muscles', MuscleViewSet)
-router.register(r'exercises', ExerciseSimpleViewSet)
-router.register(r'exercises-detailed', ExerciseDetailedViewSet)
-router.register(r'workouts', WorkoutViewSet)
-router.register(r'workouts-routines', WorkoutWithRoutinesViewSet)
-router.register(r'programs', ProgramViewSet)
-router.register(r'programs-routines', ProgramWithRoutinesViewSet)
+router.register('equipments', EquipmentViewSet)
+router.register('muscles', MuscleViewSet)
+router.register('exercises', ExerciseSimpleViewSet)
+router.register('exercises-detailed', ExerciseDetailedViewSet)
+router.register('workouts', WorkoutViewSet)
+router.register('workouts-routines', WorkoutWithRoutinesViewSet)
+router.register('programs', ProgramViewSet)
+router.register('programs-routines', ProgramWithRoutinesViewSet)
 
 urlpatterns = router.urls
