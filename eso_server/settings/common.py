@@ -3,15 +3,7 @@ from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# TODO: SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!li*x__-7a@tc!o8a)0y6x^acyw(6%s6+i10sh!y$s)oi3ej(3'
-
-# TODO: Turn off before deploying to production
-DEBUG = True
-
-ALLOWED_HOSTS = []
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -64,18 +56,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'eso_server.wsgi.application'
 
-# Database
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'eso_db_dev',
-        'USER': 'esodev',
-        'PASSWORD': 'esodevpassword',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -107,7 +87,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, '../../static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
